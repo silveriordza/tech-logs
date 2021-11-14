@@ -1,4 +1,6 @@
-import React, {useEffect} from 'react'
+import React, {Fragment, useEffect} from 'react'
+import SearchBar from './components/layout/SearchBar'
+import Logs from './components/logs/Logs'
 
 //Import the css from materialize, and also the M function of it.
 import 'materialize-css/dist/css/materialize.min.css';
@@ -13,9 +15,13 @@ const App = () => {
     M.AutoInit(); //Now we will be able to use modal dialogs, buttons and other stuff.
   });
 
-  return (
-    <div className="App">My App</div>
-  );
+  return <Fragment>
+      <SearchBar/>
+      <div className="container" >
+        <Logs/>
+      </div>
+  </Fragment>
+  
 }
 
 export default App;
