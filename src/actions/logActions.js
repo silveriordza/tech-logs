@@ -1,23 +1,5 @@
 //Import our types
-import {GET_LOGS, SET_LOADING, LOGS_ERROR, ADD_LOG} from './types';
-
-
-//The code below is option one, and it is fully comented, for the option tow look at the next function which is uncomented but also named getLogs
-// export const getLogs = () => {
-// //From here we can directly return with the type of watherver, but if we are going to do any asynch calls to our backend, that is where our redux thunk gets into place. Intead of just returning a object, we return a function and that function gets passed in a dispatch methodn that we can use to dispatch to our reducer at any point, we can request to a backend, get response and then dispatch to reducer.
-// 	//return (dispatch, getState) => {  //This return function can have a getState as property but we will not need it here.
-// 	return async (dispatch) => {
-// 		setLoading(true);
-
-// 		const res = await fetch('/logs');
-// 		const data = await res.json();
-// 		dispatch({
-// 			type: GET_LOGS,
-// 			payload: data
-// 		});
-// 	};
-
-// };
+import {GET_LOGS, SET_LOADING, LOGS_ERROR, ADD_LOG, DELETE_LOG, SET_CURRENT, CLEAR_CURRENT, UPDATE_LOG} from './types';
 
 // Get Logs from JSON Server
 export const getLogs = () => async dispatch => {
@@ -63,6 +45,64 @@ export const addLog = (log) => async dispatch => {
 		})
 	}
 };
+
+// Delete logs
+export const deleteLog = (id) => async dispatch => {
+	
+	try {
+		setLoading(true);
+		await fetch(`/logs/${id}`, {
+			method: 'DELETE'
+		});
+
+		dispatch({
+			type: DELETE_LOG,
+			payload: id
+		});
+	} catch (err) {
+		dispatch({
+			type: LOGS_ERROR,
+			payload: err.response.data
+		})
+	}
+};
+
+// Update log
+export const updateLog = log => async dispatch => {
+	try {
+		setLoading(true);
+		const res = await fetch(`/logs/${log.id}`, {
+			method: 'PUT',
+			body: JSON.stringify(log),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+		const data = await res.json();
+		dispatch({
+			type: UPDATE_LOG,
+			payload: data
+		});
+	} catch (err) {
+		dispatch({
+			type: LOGS_ERROR,
+			payload: err.response.data
+		})
+	}
+};
+// Set current log
+export const setCurrent = log => {
+	return {
+		type: SET_CURRENT,
+		payload: log
+	}
+}
+// Clear current log
+export const clearCurrent = () => {
+	return {
+		type: CLEAR_CURRENT
+	}
+}
 
 //Set loading to true.
 export const setLoading = () => {
