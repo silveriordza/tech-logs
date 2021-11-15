@@ -1,5 +1,5 @@
 //Import our types
-import {GET_LOGS, SET_LOADING, LOGS_ERROR} from './types';
+import {GET_LOGS, SET_LOADING, LOGS_ERROR, ADD_LOG} from './types';
 
 
 //The code below is option one, and it is fully comented, for the option tow look at the next function which is uncomented but also named getLogs
@@ -19,7 +19,7 @@ import {GET_LOGS, SET_LOADING, LOGS_ERROR} from './types';
 
 // };
 
-
+// Get Logs from JSON Server
 export const getLogs = () => async dispatch => {
 	
 	try {
@@ -28,6 +28,32 @@ export const getLogs = () => async dispatch => {
 		const data = await res.json();
 		dispatch({
 			type: GET_LOGS,
+			payload: data
+		});
+	} catch (err) {
+		dispatch({
+			type: LOGS_ERROR,
+			payload: err.response.data
+		})
+	}
+};
+
+// Add new Logs from JSON Server
+export const addLog = (log) => async dispatch => {
+	
+	try {
+		setLoading(true);
+		//This is the wait to do a POST http request using fetch, just pass an object with the method, body and headers as below
+		const res = await fetch('/logs', {
+			method: 'POST',
+			body: JSON.stringify(log),
+			headers : {
+				'Content-Type' : 'application/json'
+			}
+		});
+		const data = await res.json();
+		dispatch({
+			type: ADD_LOG,
 			payload: data
 		});
 	} catch (err) {

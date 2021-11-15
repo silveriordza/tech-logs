@@ -1,46 +1,64 @@
 import React, {useState} from 'react'
+//Connect is used to connect this component to the redux framework
+import {connect} from 'react-redux'
+import PropTypes from 'prop-types'
+// Import the addLog action from the actions file
+import { addLog } from '../../actions/logActions'; 
 import M from 'materialize-css/dist/js/materialize.min.js';
-
-const AddLogModal = () => {
+// Since addLog function is a prop, we will pass it here in an object as a prop
+const AddLogModal = ({addLog}) => {
+	//This is a form, so even with Redux in, we stil need our state at the component level.
 	const [message, setMessage] = useState('');
 	const [attention, setAttention] = useState(false);
 	const [tech, setTech] = useState('');
-
+	
 	const onSubmit = () => {
 		if (message === '' || tech === ''){
+			//M is the Materialize object, which has a toast function that you can use to display Alert messages to the user with a nice style format.
 			M.toast({html: 'Please enter a message and tech'});
 		} else {
-			console.log(message, tech, attention);
+			const newLog = {
+				message,
+				attention,
+				tech,
+				date: new Date()
+			}	
+			addLog(newLog);
+			M.toast({html: `Log added by ${tech}`});
+			//Clear Fields
+			setMessage('');
+			setTech('');
+			setAttention(false);
 		}
 	}
 
 	return (
 		//Note this div is the modal that will show up when the + bubble button is clicked and the id should perfectly match with the href of that button which was href='#add-log-modal'
 		<div id='add-log-modal' className='modal' style={modalStyle}>
-			<div className="modal-content">
+			<div className='modal-content'>
 				<h4>Enter System Log</h4>
-				<div className="row">
-					<div className="input-field">
+				<div className='row'>
+					<div className='input-field'>
 						<input 
-							type="text" 
+							type='text' 
 							name='message' 
 							value={message} 
 							onChange={e => setMessage(e.target.value)}
 						/>
-						<label htmlFor="message" className="active">
+						<label htmlFor='message' className='active'>
 							Log Message
 						</label>
 					</div>
 				</div>
-				<div className="row">
-					<div className="input-field">
+				<div className='row'>
+					<div className='input-field'>
 						<select 
-							name="tech" 
+							name='tech' 
 							value={tech} 
 							className='browser-default' 
 							onChange={e=>setTech(e.target.value)} 
 						>
-							<option value="" disabled>
+							<option value='' disabled>
 								Select Technician
 							</option>
 							<option value='John Doe'>John Doe</option>
@@ -49,13 +67,13 @@ const AddLogModal = () => {
 						</select>
 					</div>
 				</div>
-				<div className="row">
-					<div className="input-field">
+				<div className='row'>
+					<div className='input-field'>
 						<p>
 							<label>
 								<input 
-									type="checkbox" 
-									className="filled-in" 
+									type='checkbox' 
+									className='filled-in' 
 									checked={attention} 
 									value={attention}
 									onChange={e=>setAttention(!attention)}
@@ -67,11 +85,11 @@ const AddLogModal = () => {
 				</div>
 				
 			</div>
-			<div className="modal-footer">
+			<div className='modal-footer'>
 				<a 
-					href="#!" 
+					href='#!' 
 					onClick={onSubmit}
-					className="modal-close waves-effect blue waves-light btn">
+					className='modal-close waves-effect blue waves-light btn'>
 					Enter
 				</a>
 			</div>
@@ -79,9 +97,14 @@ const AddLogModal = () => {
 	)
 }
 
+AddLogModal.propTypes = {
+	addLog: PropTypes.func.isRequired
+}
+
+
 const modalStyle = {
 	width: '75%',
 	height: '75%'
 };
 
-export default AddLogModal
+export default connect(null, { addLog })(AddLogModal)
