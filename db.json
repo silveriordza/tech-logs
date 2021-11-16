@@ -1,25 +1,18 @@
 {
   "logs": [
     {
-      "id": 1,
-      "message": "Change network card on server 008",
+      "message": "Log 1 by John Doe",
       "attention": false,
-      "tech": "Sam Smith",
-      "date": "2021-11-15T22:45:48.852Z"
+      "tech": "undefined Doe",
+      "date": "2021-11-16T00:31:56.273Z",
+      "id": 1
     },
     {
-      "id": 2,
-      "message": "Fixed Hard drive on workstation 002",
+      "message": "assdf",
       "attention": true,
       "tech": "Sam Smith",
-      "date": "2021-11-15T23:29:47.979Z"
-    },
-    {
-      "id": 3,
-      "message": "1122 wireless down 777",
-      "attention": true,
-      "tech": "Sara Wilson",
-      "date": "2021-11-15T23:29:58.510Z"
+      "date": "2021-11-16T00:41:59.796Z",
+      "id": 2
     }
   ],
   "techs": [
